@@ -2,8 +2,8 @@
 // Created by maple on 25-5-19.
 //
 
-#ifndef TEST_H
-#define TEST_H
+#ifndef GAIN_H
+#define GAIN_H
 
 #include "./ProcessorBase.h"
 #include <juce_audio_processors/juce_audio_processors.h>
@@ -61,4 +61,4 @@ private:
 };
 
 
-#endif //TEST_H
+#endif //GAIN_H
