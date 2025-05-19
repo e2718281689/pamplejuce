@@ -1,8 +1,8 @@
 #pragma once
 
-#include <juce_audio_processors/juce_audio_processors.h>
+#include "./effect/Gain.h"
 #include "./effect/ProcessorGroup.h"
-#include "./effect/test.h"
+#include <juce_audio_processors/juce_audio_processors.h>
 
 #if (MSVC)
 #include "ipps.h"

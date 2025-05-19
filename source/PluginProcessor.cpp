@@ -99,7 +99,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     AudioChain.prepareToPlay(sampleRate, samplesPerBlock);
     AudioChain.AudioGroupInit();
 
-    AudioChain.addProcessorNode(std::make_unique < test >(apvts));
+    AudioChain.addProcessorNode(std::make_unique < Gain >(apvts));
 
 }
 
@@ -187,6 +187,13 @@ void PluginProcessor::getStateInformation (juce::MemoryBlock& destData)
 juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::CreateParameters()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout parameterLayout;
+
+    parameterLayout.add(std::make_unique<juce::AudioParameterFloat>(
+    "gainSlider",
+    "gainSlider",
+    juce::NormalisableRange<float>(0.0f, 1.0f, 0.01f),
+    0.5f));
+
     return parameterLayout;
 }
 void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)

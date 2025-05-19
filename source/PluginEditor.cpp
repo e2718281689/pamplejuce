@@ -5,7 +5,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 {
     juce::ignoreUnused (processorRef);
 
-    addAndMakeVisible (inspectButton);
+    // addAndMakeVisible (inspectButton);
 
     // this chunk of code instantiates and opens the melatonin inspector
     inspectButton.onClick = [&] {
@@ -17,6 +17,11 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
         inspector->setVisible (true);
     };
+
+    gainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    addAndMakeVisible(gainSlider);
+
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -36,7 +41,7 @@ void PluginEditor::paint (juce::Graphics& g)
     g.setColour (juce::Colours::white);
     g.setFont (16.0f);
     auto helloWorld = juce::String ("Hello from ") + PRODUCT_NAME_WITHOUT_VERSION + " v" VERSION + " running in " + CMAKE_BUILD_TYPE;
-    g.drawText (helloWorld, area.removeFromTop (150), juce::Justification::centred, false);
+    g.drawText (helloWorld, area.removeFromTop (100), juce::Justification::centred, false);
 }
 
 void PluginEditor::resized()
@@ -44,5 +49,5 @@ void PluginEditor::resized()
     // layout the positions of your child components here
     auto area = getLocalBounds();
     area.removeFromBottom(50);
-    inspectButton.setBounds (getLocalBounds().withSizeKeepingCentre(100, 50));
+    gainSlider.setBounds (area.withSizeKeepingCentre(100, 100));
 }
