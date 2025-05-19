@@ -13,18 +13,19 @@ class Gain  : public ProcessorBase, public juce::AudioProcessorValueTreeState::L
 public:
     Gain(juce::AudioProcessorValueTreeState& apvts):Apvts(apvts)
     {
+        // add Listener
         Apvts.addParameterListener("gainSlider", this);
-
-
     }
 
     ~Gain()
     {
+        // remove Listener
         Apvts.removeParameterListener("gainSlider", this);
     }
 
     void parameterChanged(const juce::String& parameterID, float newValue)
     {
+        //  Listener parameter
         if (parameterID.equalsIgnoreCase("gainSlider"))
         {
             juce::Logger::outputDebugString("gain =" + juce::String(gain));
@@ -32,29 +33,25 @@ public:
          }
     }
 
-    void init(juce::AudioProcessorValueTreeState &apvts) override
-    {
-
-    }
-
     void prepareToPlay(double sampleRate, int samplesPerBlock) override
     {
-
+        //  get parameter
         gain = Apvts.getParameterAsValue("gainSlider").getValue();
     }
 
     void processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer&) override
     {
+        //  process
         buffer.applyGain (gain);
     }
 
     void reset() override
     {
-
+        gain = 0;
     }
 
 
-    const juce::String getName() const override { return "test"; }
+    const juce::String getName() const override { return "Gain"; }
 
 private:
 

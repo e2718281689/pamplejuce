@@ -91,14 +91,15 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     // initialisation that you need..
     juce::ignoreUnused (sampleRate, samplesPerBlock);
 
+    // ProcessorGroup init
     AudioChain.setPlayConfigDetails(getMainBusNumInputChannels(),
                                 getMainBusNumOutputChannels(),
                                         sampleRate,
                                         samplesPerBlock);
-
     AudioChain.prepareToPlay(sampleRate, samplesPerBlock);
     AudioChain.AudioGroupInit();
 
+    // add ProcessorNode
     AudioChain.addProcessorNode(std::make_unique < Gain >(apvts));
 
 }
@@ -162,6 +163,7 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         // ..do something to the data...
     }
 
+    //ProcessorGroup process
     AudioChain.processBlock(buffer, midiMessages);
 }
 
