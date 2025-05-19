@@ -10,7 +10,8 @@ PluginProcessor::PluginProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),apvts(*this,nullptr,"Parameters", CreateParameters())
+                        ,AudioChain(apvts)
 {
 }
 
@@ -89,6 +90,17 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     juce::ignoreUnused (sampleRate, samplesPerBlock);
+
+    AudioChain.setPlayConfigDetails(getMainBusNumInputChannels(),
+                                getMainBusNumOutputChannels(),
+                                        sampleRate,
+                                        samplesPerBlock);
+
+    AudioChain.prepareToPlay(sampleRate, samplesPerBlock);
+    AudioChain.AudioGroupInit();
+
+    AudioChain.addProcessorNode(std::make_unique < test >(apvts));
+
 }
 
 void PluginProcessor::releaseResources()
@@ -149,6 +161,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::ignoreUnused (channelData);
         // ..do something to the data...
     }
+
+    AudioChain.processBlock(buffer, midiMessages);
 }
 
 //==============================================================================
@@ -170,7 +184,11 @@ void PluginProcessor::getStateInformation (juce::MemoryBlock& destData)
     // as intermediaries to make it easy to save and load complex data.
     juce::ignoreUnused (destData);
 }
-
+juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::CreateParameters()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout parameterLayout;
+    return parameterLayout;
+}
 void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
